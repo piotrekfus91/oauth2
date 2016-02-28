@@ -7,5 +7,35 @@
 <body>
     <p th:text="'Hello, ' + ${userInfo.displayName} + '!'" />
     <p th:text="'Email: ' + ${userInfo.email}" />
+    <p>Folders</p>
+
+    <table border="0">
+        <tr>
+            <th>Name</th>
+            <th>Path</th>
+            <th></th>
+        </tr>
+        <th:block th:each="folder : ${folders}">
+            <tr>
+                <td th:text="${folder.name}"></td>
+                <td th:text="${folder.path}"></td>
+                <td><a th:href="@{/(folder=${folder.path})}">Open</a></td>
+            </tr>
+        </th:block>
+    </table>
+
+    <p>Files</p>
+    <table border="0">
+        <tr>
+            <th>Name</th>
+            <th>Path</th>
+        </tr>
+        <th:block th:each="file : ${files}">
+            <tr>
+                <td th:text="${file.name}"></td>
+                <td th:text="${file.path}"></td>
+            </tr>
+        </th:block>
+    </table>
 </body>
 </html>
