@@ -1,1 +1,5 @@
 apply plugin: 'spring-boot'
+
+dependencies {
+    compile('org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.1')
+}
