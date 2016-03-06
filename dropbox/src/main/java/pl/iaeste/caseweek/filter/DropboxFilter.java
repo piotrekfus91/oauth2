@@ -1,17 +1,21 @@
 package pl.iaeste.caseweek.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.oltu.oauth2.client.OAuthClient;
+import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// TODO - uncomment component registration
-//@Component
+@Component
 @Slf4j
 public class DropboxFilter implements Filter {
     private static final String CLIENT_ID = "m6xbnhqrt3gss12";
@@ -60,27 +64,35 @@ public class DropboxFilter implements Filter {
         }
     }
 
-    // https://cwiki.apache.org/confluence/display/OLTU/OAuth+2.0+Client+Quickstart
-    // TODO
     private void requestCode(HttpServletResponse response) throws OAuthSystemException, IOException {
-        OAuthClientRequest oauthRequest = null;
+        OAuthClientRequest oauthRequest = OAuthClientRequest
+                .authorizationLocation("https://www.dropbox.com/1/oauth2/authorize")
+                .setClientId(CLIENT_ID)
+                .setRedirectURI(REDIRECT_URI)
+                .setResponseType("code")
+                .buildQueryMessage();
 
         log.info("redirecting user to authorize in dropbox: {}", oauthRequest.getLocationUri());
 
         response.sendRedirect(oauthRequest.getLocationUri());
     }
 
-    // https://cwiki.apache.org/confluence/display/OLTU/OAuth+2.0+Client+Quickstart
-    // TODO
     private void exchangeCodeForToken(String code, HttpServletRequest request) throws OAuthSystemException, OAuthProblemException {
         log.info("code is {}", code);
 
-        OAuthClientRequest oAuthRequest = null;
+        OAuthClientRequest oAuthRequest = OAuthClientRequest
+                .tokenLocation("https://api.dropboxapi.com/1/oauth2/token")
+                .setGrantType(GrantType.AUTHORIZATION_CODE)
+                .setClientId(CLIENT_ID)
+                .setClientSecret(CLIENT_SECRET)
+                .setCode(code)
+                .setRedirectURI(REDIRECT_URI)
+                .buildBodyMessage();
 
-        String token = null;
+        OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+        OAuthJSONAccessTokenResponse oauthResponse = oAuthClient.accessToken(oAuthRequest, "POST");
 
-        log.info("token is {}", token);
-
+        String token = oauthResponse.getAccessToken();
         request.getSession(true).setAttribute("token", token);
     }
 }
