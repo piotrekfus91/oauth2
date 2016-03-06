@@ -1,6 +1,5 @@
 package pl.iaeste.caseweek.api;
 
-import org.springframework.stereotype.Component;
 import pl.iaeste.caseweek.dto.Entry;
 import pl.iaeste.caseweek.dto.UserInfo;
 
@@ -8,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO - comment component registration
-@Component
+//@Component
 public class StaticApi implements Api {
     @Override
     public List<Entry> getEntries(String folder) {
