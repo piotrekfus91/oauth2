@@ -6,7 +6,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,7 +17,7 @@ import pl.iaeste.caseweek.dto.UserInfo;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@Component
+//@Component
 public class RestApi implements Api {
     @Autowired
     private ObjectFactory<RestTemplate> restTemplateObjectFactory;
