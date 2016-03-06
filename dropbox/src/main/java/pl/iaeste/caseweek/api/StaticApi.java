@@ -7,6 +7,7 @@ import pl.iaeste.caseweek.dto.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO - comment component registration
 @Component
 public class StaticApi implements Api {
     @Override
